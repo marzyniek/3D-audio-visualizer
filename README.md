@@ -1,4 +1,4 @@
-3D Audio Visualizer
+# 3D Audio Visualizer
 
 link: https://marzyniek.github.io/3D-audio-visualizer/
 
