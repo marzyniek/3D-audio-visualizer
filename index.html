@@ -7,6 +7,7 @@
     <title>3D Audio Visulizer</title>
   </head>
   <body>
+
     <div class="container slider-container">
       <div class="slider-wrapper">
         <label for="myRange1">min_amp</label>
@@ -58,15 +59,22 @@
     <div class="container color-picker-container">
       <div class="color-picker-wrapper">
         <label for="colorPicker1">Color 1</label>
-        <input type="color" id="colorPicker1" class="color-picker">
+        <input type="color" id="colorPicker1" class="color-picker" value="#ffffff">
       </div>
 
       <div class="color-picker-wrapper">
         <label for="colorPicker2">Color 2</label>
-        <input type="color" id="colorPicker2" class="color-picker">
+        <input type="color" id="colorPicker2" class="color-picker" value="#ffffff">
       </div>
     </div>
-
+    <div class="container instructions">
+      <p style="font-size: 18px; text-align: center;">Controls</p>
+        <ul>
+          <li><b>Drag</b> mouse to move</li>
+          <li><b>Mousewheel</b> to zoom</li>
+          <li><b>Space</b> to pause/resume music</li>
+        </ul>
+    </div>
     
     <canvas class="webgl"></canvas>
     <script type="module" src="/main.js"></script>

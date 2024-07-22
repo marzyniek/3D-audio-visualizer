@@ -3,66 +3,13 @@ import "./style.css";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import vertexShader from './shaders/vertex2.glsl';
 import fragmentShader from './shaders/fragment.glsl';
-import { color, sampler } from 'three/examples/jsm/nodes/Nodes.js';
-import { ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 
 // Scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 
-let shapeVertices = new Array(32);
-for (let i = 0; i < shapeVertices.length; i++) {
-  shapeVertices[i] = new THREE.Vector3();
-}
-
-const soundThresholdMult = 0.5;
-let vertCount = 0;
-const zeroVector = new THREE.Vector3();
-
 const fileInput = document.getElementById('audio-file-input');
 const fileNameDisplay = document.getElementById('file-name');
-
-function hexToVector3(val) {
-  let col = new THREE.Vector3();
-  col.x = parseInt(val.slice(1,3), 16) / 255.0
-  col.y = parseInt(val.slice(3,5), 16) / 255.0 
-  col.z = parseInt(val.slice(5,7), 16) / 255.0 
-
-  return col;
-}
-
-const colorPickers = document.querySelectorAll('.color-picker');
-colorPickers.forEach(picker => {
-  picker.addEventListener('input', (event) => {  
-    uniforms.u_color_a.value = hexToVector3(document.getElementById('colorPicker1').value);
-    uniforms.u_color_b.value = hexToVector3(document.getElementById('colorPicker2').value);
-    console.log(uniforms.u_color_a.value);
-  });
-});
-
-fileInput.addEventListener('change', function() {
-  if (fileInput.files.length > 0) {
-    fileNameDisplay.textContent = fileInput.files[0].name;
-  } else {
-    fileNameDisplay.textContent = 'No file chosen';
-  }
-});
-
-document.querySelectorAll('.slider').forEach(slider => {
-  const currentSpan = document.getElementById(`current${slider.id.slice(-1)}`);
-  
-  slider.addEventListener('input', () => {
-    currentSpan.textContent = `${slider.value}`;
-    updateInputUniforms();
-  });
-});
-
-function updateInputUniforms() {
-  uniforms.u_min_amp.value = document.getElementById("myRange1").value;
-  uniforms.u_max_amp.value = document.getElementById("myRange2").value;
-  uniforms.u_amp_power.value = document.getElementById("myRange3").value;
-  uniforms.u_power.value = document.getElementById("myRange4").value;
-}
 
 document.body.appendChild(fileInput);
 
@@ -89,9 +36,49 @@ function handleFileUpload(event) {
 
 const analyserNode = new THREE.AudioAnalyser(audio, 2048);
 const dataArray = new Uint8Array(analyserNode.getFrequencyData());
-const avgDataArray = new Uint8Array(8);
 analyserNode.analyser.smoothingTimeConstant = 0.8;
 analyserNode.analyser.maxDecibels = 255;
+
+function hexToVector3(val) {
+  let col = new THREE.Vector3();
+  col.x = parseInt(val.slice(1,3), 16) / 255.0
+  col.y = parseInt(val.slice(3,5), 16) / 255.0 
+  col.z = parseInt(val.slice(5,7), 16) / 255.0 
+
+  return col;
+}
+
+const colorPickers = document.querySelectorAll('.color-picker');
+colorPickers.forEach(picker => {
+  picker.addEventListener('input', (event) => {  
+    uniforms.u_color_a.value = hexToVector3(document.getElementById('colorPicker1').value);
+    uniforms.u_color_b.value = hexToVector3(document.getElementById('colorPicker2').value);
+  });
+});
+
+fileInput.addEventListener('change', function() {
+  if (fileInput.files.length > 0) {
+    fileNameDisplay.textContent = fileInput.files[0].name;
+  } else {
+    fileNameDisplay.textContent = 'No file chosen';
+  }
+});
+
+document.querySelectorAll('.slider').forEach(slider => {
+  const currentSpan = document.getElementById(`current${slider.id.slice(-1)}`);
+  
+  slider.addEventListener('input', () => {
+    currentSpan.textContent = `${slider.value}`;
+    updateInputUniforms();
+  });
+});
+
+function updateInputUniforms() {
+  uniforms.u_min_amp.value = document.getElementById("myRange1").value;
+  uniforms.u_max_amp.value = document.getElementById("myRange2").value;
+  uniforms.u_amp_power.value = document.getElementById("myRange3").value;
+  uniforms.u_power.value = document.getElementById("myRange4").value;
+}
 
 const radius = 1.0;
 
@@ -132,6 +119,7 @@ class Particle {
     this.velocity.add(dir.multiplyScalar(magnitude));
   }
 }
+// init all particles
 var vertices = [];
 const particles = []; 
 const partCount = 35;
@@ -145,14 +133,16 @@ for (let z = -partCount; z < partCount; z += 2) {
   }
 }
 
+// Geometry
+
 const uniforms = {
   u_avg_freq: { type: "f", value: 0.0 },
   u_max_avg_freq: { type: "f", value: 1.0 },
   u_data_array: { type: "float[32]", value: dataArray },
   u_base: { type: "vec3", value: new THREE.Vector3(0.0, 0.0, 0.0) },
   u_vert_count: { type: "int", value: 0 },
-  u_color_a: { type: "vec3", value: new THREE.Vector3(0.69, 0.86, 0.26) },
-  u_color_b: { type: "vec3", value: new THREE.Vector3(0.86, 0.15, 0.39) },
+  u_color_a: { type: "vec3", value: new THREE.Vector3(1.0, 1.0, 1.0) },
+  u_color_b: { type: "vec3", value: new THREE.Vector3(1.0, 1.0, 1.0) },
   u_min_amp: { type: "f", value: document.getElementById("myRange1").value },
   u_max_amp: { type: "f", value: document.getElementById("myRange2").value },
   u_amp_power: { type: "f", value: document.getElementById("myRange3").value },
@@ -202,6 +192,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(sizes.width, sizes.height);
 });
 
+// Pause/Play
 window.addEventListener("keydown", onDocumentKeyDown, false);
 
 function onDocumentKeyDown(event) {
@@ -230,6 +221,7 @@ const loop = () => {
 
     const avg_freq = analyserNode.getAverageFrequency();
     uniforms.u_avg_freq.value = avg_freq;
+    
     if (loop_count >= 1024) {
       max_avg_freq = 1.0;
     }
@@ -239,11 +231,13 @@ const loop = () => {
     }
     uniforms.u_data_array.value = dataArray;
   }
+  
   vertices = [];
   particles.forEach(particle => {
     particle.update();
     vertices.push(particle.pos.x, particle.pos.y, particle.pos.z);
   });
+  
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
   renderer.render(scene, camera);
   window.requestAnimationFrame(loop);
