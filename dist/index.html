@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/3D-audio-visualizer/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Audio Visulizer</title>
+    <script type="module" crossorigin src="/3D-audio-visualizer/assets/index-Jt3SoIGv.js"></script>
+    <link rel="stylesheet" crossorigin href="/3D-audio-visualizer/assets/index-gVYVP4LI.css">
+  </head>
+  <body>
+    <div class="container slider-container">
+      <div class="slider-wrapper">
+        <label for="myRange1">min_amp</label>
+        <input type="range" step="0.005" min="0.0" max="1.25" value="0.75" class="slider" id="myRange1">
+        <div class="slider-values">
+          <span class="slider-value" id="min1">0.0</span>
+          <span class="slider-value" id="current1">0.75</span>
+          <span class="slider-value" id="max1">1.25</span>
+        </div>
+      </div>
+
+      <div class="slider-wrapper">
+        <label for="myRange2">max_amp</label>
+        <input type="range" step="0.01" min="0.0" max="3.0" value="1.75" class="slider" id="myRange2">
+        <div class="slider-values">
+          <span class="slider-value" id="min2">0.0</span>
+          <span class="slider-value" id="current2">1.75</span>
+          <span class="slider-value" id="max2">3.0</span>
+        </div>
+      </div>
+
+      <div class="slider-wrapper">
+        <label for="myRange3">amp_power</label>
+        <input type="range" step="0.01" min="0.0" max="5.0" value="2.5" class="slider" id="myRange3">
+        <div class="slider-values">
+          <span class="slider-value" id="min3">0.0</span>
+          <span class="slider-value" id="current3">2.5</span>
+          <span class="slider-value" id="max3">5.0</span>
+        </div>
+      </div>
+
+      <div class="slider-wrapper">
+        <label for="myRange4">power</label>
+        <input type="range" step="0.01" min="0.0" max="5.0" value="1.5" class="slider" id="myRange4">
+        <div class="slider-values">
+          <span class="slider-value" id="min4">0.0</span>
+          <span class="slider-value" id="current4">1.5</span>
+          <span class="slider-value" id="max4">5.0</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container file-input-container">
+      <label for="audio-file-input" class="file-label">Upload Audio File</label>
+      <input type="file" accept="audio/*" class="file-input" id="audio-file-input">
+      <span class="file-name" id="file-name">No file chosen</span>
+    </div>
+    
+    <canvas class="webgl"></canvas>
+  </body>
+</html>
