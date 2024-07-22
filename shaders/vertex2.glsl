@@ -8,7 +8,9 @@ export default /* glsl */ `
     uniform float u_amp_power;
     uniform float u_min_amp;
     uniform float u_max_amp;
-    
+    uniform vec3 u_color_a;
+    uniform vec3 u_color_b;
+
     float map(float value, float min1, float max1, float min2, float max2) {
         return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
     }
@@ -35,8 +37,7 @@ export default /* glsl */ `
             }
         }
         float travel = map(distance(newPos, position), 0.0, 1.0, 0.0, 1.0);
-        vColor = vec4(travel, 0.0, 1.0 - travel, 1.0);
-        vColor = vec4(1.0);
+        vColor = vec4((u_color_a * travel) + (u_color_b * (1.0 - travel)), 1.0) ;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0);
         gl_PointSize = 0.5;
     }

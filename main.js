@@ -3,7 +3,8 @@ import "./style.css";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import vertexShader from './shaders/vertex2.glsl';
 import fragmentShader from './shaders/fragment.glsl';
-import { sampler } from 'three/examples/jsm/nodes/Nodes.js';
+import { color, sampler } from 'three/examples/jsm/nodes/Nodes.js';
+import { ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 
 // Scene
 const scene = new THREE.Scene();
@@ -18,41 +19,26 @@ const soundThresholdMult = 0.5;
 let vertCount = 0;
 const zeroVector = new THREE.Vector3();
 
-function generateFibonacciSpherePoints(n) {
-  const points = [];
-  const goldenRatio = (1 + Math.sqrt(5)) / 2;
-
-  for (let i = 0; i < n; i++) {
-    const theta = 2 * Math.PI * i / goldenRatio;
-    const phi = Math.acos(1 - 2 * (i + 0.5) / n);
-    const x = Math.cos(theta) * Math.sin(phi);
-    const y = Math.sin(theta) * Math.sin(phi);
-    const z = Math.cos(phi);
-
-    points.push(new THREE.Vector3(x, y, z));
-  }
-
-  return points;
-}
-
-function updateShapeVertices(dataArray) {
-  let count = 0;
-  for (const value of dataArray) {
-    if (value > soundThresholdMult * dataArray[0]) {
-      count++;
-    }
-  }
-  const len = shapeVertices.length;
-  vertCount = count;
-  shapeVertices = generateFibonacciSpherePoints(count);
-  console.log(shapeVertices);
-  for (let i = 0; i < len - count; i++) {
-    shapeVertices[count + i] = zeroVector;
-  }
-}
-
 const fileInput = document.getElementById('audio-file-input');
 const fileNameDisplay = document.getElementById('file-name');
+
+function hexToVector3(val) {
+  let col = new THREE.Vector3();
+  col.x = parseInt(val.slice(1,3), 16) / 255.0
+  col.y = parseInt(val.slice(3,5), 16) / 255.0 
+  col.z = parseInt(val.slice(5,7), 16) / 255.0 
+
+  return col;
+}
+
+const colorPickers = document.querySelectorAll('.color-picker');
+colorPickers.forEach(picker => {
+  picker.addEventListener('input', (event) => {  
+    uniforms.u_color_a.value = hexToVector3(document.getElementById('colorPicker1').value);
+    uniforms.u_color_b.value = hexToVector3(document.getElementById('colorPicker2').value);
+    console.log(uniforms.u_color_a.value);
+  });
+});
 
 fileInput.addEventListener('change', function() {
   if (fileInput.files.length > 0) {
