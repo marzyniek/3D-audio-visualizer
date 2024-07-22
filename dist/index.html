@@ -5,8 +5,8 @@
     <link rel="icon" type="image/svg+xml" href="/3D-audio-visualizer/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Audio Visulizer</title>
-    <script type="module" crossorigin src="/3D-audio-visualizer/assets/index-Jt3SoIGv.js"></script>
-    <link rel="stylesheet" crossorigin href="/3D-audio-visualizer/assets/index-gVYVP4LI.css">
+    <script type="module" crossorigin src="/3D-audio-visualizer/assets/index-ZfBRp_fZ.js"></script>
+    <link rel="stylesheet" crossorigin href="/3D-audio-visualizer/assets/index-RLPDeQ3o.css">
   </head>
   <body>
     <div class="container slider-container">
@@ -56,6 +56,19 @@
       <input type="file" accept="audio/*" class="file-input" id="audio-file-input">
       <span class="file-name" id="file-name">No file chosen</span>
     </div>
+
+    <div class="container color-picker-container">
+      <div class="color-picker-wrapper">
+        <label for="colorPicker1">Color 1</label>
+        <input type="color" id="colorPicker1" class="color-picker">
+      </div>
+
+      <div class="color-picker-wrapper">
+        <label for="colorPicker2">Color 2</label>
+        <input type="color" id="colorPicker2" class="color-picker">
+      </div>
+    </div>
+
     
     <canvas class="webgl"></canvas>
   </body>
